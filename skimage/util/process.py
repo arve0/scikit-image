@@ -35,4 +35,4 @@ def process_chunks(function, array, chunks, depth=None, mode=None):
         mode = 'periodic'
 
     darr = da.from_array(array, chunks=chunks)
-    return darr.map_overlap(function, depth, boundary=mode)
+    return darr.map_overlap(function, depth, boundary=mode).compute()
