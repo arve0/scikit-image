@@ -3,13 +3,20 @@ import dask.array as da
 __all__ = ['process_chunks']
 
 
-def process_chunks(function, array, chunks=None, depth=None, mode=None):
-    """
+def process_chunks(function, array, chunks, depth=None, mode=None):
+    """Map a function in parallel across an array.
+
+    Split an array into possibly overlapping chunks of a given depth and
+    boundary type, call the given function in parallel on the chunks, combine
+    the chunks and return the resulting array.
+
+    Parameters
+    ----------
     function : function
         Function to be mapped which takes an array as an argument.
     array : numpy array
         array which the function will be applied to.
-    chunks : tuple or tuple of tuples
+    chunks : int, tuple, or tuple of tuples
         One tuple of length array.ndim or a list of tuples of length ndim.
         Where each subtuple adds to the size of the array in the corresponding
         dimension.
@@ -22,10 +29,8 @@ def process_chunks(function, array, chunks=None, depth=None, mode=None):
     -----
     Be careful choosing the depth so that it is never larger than the length of
     a chunk.
-    """
-    if chunks is None:
-        raise ValueError("`chunk` key word argument must be provided.")
 
+    """
     if mode == 'wrap':
         mode = 'periodic'
 
