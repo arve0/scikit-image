@@ -15,3 +15,4 @@ matplotlib==1.4.2
 pillow==2.6.1
 wheel
 nose
+-e git://github.com/ContinuumIO/dask.git
