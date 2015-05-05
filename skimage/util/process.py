@@ -27,7 +27,7 @@ def _get_chunks(shape, ncpu):
     return tuple(chunks)
 
 
-def process_chunks(function, array, chunks=None, depth=0, mode=None):
+def process_chunks(function, array, args=(), kwargs={} chunks=None, depth=0, mode=None):
     """Map a function in parallel across an array.
 
     Split an array into possibly overlapping chunks of a given depth and
@@ -64,5 +64,8 @@ def process_chunks(function, array, chunks=None, depth=0, mode=None):
     if mode == 'wrap':
         mode = 'periodic'
 
+    def wrapped_func(arr):
+        return function(arr, *args, **kwargs)
+
     darr = da.from_array(array, chunks=chunks)
-    return darr.map_overlap(function, depth, boundary=mode).compute()
+    return darr.map_overlap(wrapped_func, depth, boundary=mode).compute()
